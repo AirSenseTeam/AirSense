@@ -168,36 +168,36 @@
     <section id="home" class="card">
       <h2>Current Air Status</h2>
 
-      <div class="status">
-        🟠 Elevated Risk
+      <div class="status" id="airStatus">
+        Loading...
       </div>
 
       <div class="grid">
 
-        <div class="reading-box">
-          <h3>Dust Level</h3>
-          <div class="reading-value">Moderate</div>
-        </div>
-
-        <div class="reading-box">
-          <h3>Humidity</h3>
-          <div class="reading-value">82%</div>
-        </div>
-
-        <div class="reading-box">
+        <div class="card">
           <h3>Temperature</h3>
-          <div class="reading-value">29°C</div>
+          <p id="temperature>-- °C</p>
         </div>
 
-        <div class="reading-box">
-          <h3>Pressure</h3>
-          <div class="reading-value">1012 hPa</div>
+        <div class="card">
+          <h3>Humidity</h3>
+          <p id="humidity>-- %</p>
+        </div>
+
+        <div class="card">
+          <h3>Dust Level</h3>
+          <p id="pm25>-- µg/m³</p>
+        </div>
+
+        <div class="card">
+          <h3>Air Quality</h3>
+          <p id="mq135">--</p>
         </div>
 
       </div>
 
       <div class="warning">
-        Avoid prolonged exposure in unfavorable environmental conditions.
+        Waiting for sensor data...
       </div>
     </section>
 
@@ -266,5 +266,36 @@
   </div>
 
 </body>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  import {
+    getDatabase,
+    ref,
+    onValue
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
+  const firebaseConfig = {
+  apiKey: "AIzaSyCkDeopReuUvA3AFvVbFoJp6GZ6gyyqthA",
+  authDomain: "airsense-c11fc.firebaseapp.com",
+  databaseURL: "https://airsense-c11fc-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "airsense-c11fc",
+  storageBucket: "airsense-c11fc.firebasestorage.app",
+  messagingSenderId: "654892157639",
+  appId: "1:654892157639:web:3c36247f62e99a18060ce2",
+  measurementId: "G-V2N7GP4YEH"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  const sensorRef = ref(database, "sensorData");
+
+  onValue(sensorRef, (snapshot) => {
+    const data = snapshot.val();
+
+    console.log("Live sensor data:", data);
+  });
+</script>
+
+</body>
 </html>
